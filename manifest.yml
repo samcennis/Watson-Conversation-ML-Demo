@@ -1,0 +1,10 @@
+applications:
+- path: .
+  memory: 512M
+  instances: 1
+  domain: mybluemix.net
+  name: Watson-Conversation-ML-Demo
+  host: Watson-Conversation-ML-Demo
+  disk_quota: 1024M
+  services:
+  - Watson-Conversation-ML-Demo-cloudantNoSQLDB
