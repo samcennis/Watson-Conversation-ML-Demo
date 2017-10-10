@@ -18,14 +18,14 @@ var Api = (function () {
             return responsePayload;
         }
         , setResponsePayload: function (newPayloadStr) {
-            responsePayload = JSON.parse(newPayloadStr);
-        }
-        , getScoreResponsePayload: function () {
-            return scoreResponsePayload;
-        }
-        , setScoreResponsePayload: function (newPayloadStr) {
-            scoreResponsePayload = JSON.parse(newPayloadStr);
-        }
+                responsePayload = JSON.parse(newPayloadStr);
+            }
+            /*, getScoreResponsePayload: function () {
+                return scoreResponsePayload;
+            }
+            , setScoreResponsePayload: function (newPayloadStr) {
+                scoreResponsePayload = JSON.parse(newPayloadStr);
+            }*/
     };
     // Send a message request to the server
     function sendRequest(text, context) {
