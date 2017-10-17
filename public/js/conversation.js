@@ -151,6 +151,10 @@ var ConversationPanel = (function () {
         if (Object.prototype.toString.call(textArray) !== '[object Array]') {
             textArray = [textArray];
         }
+        //If there is an ML response, append it to the msesage array
+        if (newPayload.ml_output) {
+            textArray.push("<h2>" + newPayload.ml_output.nodeADP_class + "</h2>" + "<img src='../img/" + newPayload.ml_output.nodeADP_class + ".png'/>");
+        }
         var messageArray = [];
         textArray.forEach(function (currentText) {
             if (currentText) {
