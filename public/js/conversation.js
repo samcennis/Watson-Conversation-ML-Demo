@@ -151,10 +151,6 @@ var ConversationPanel = (function () {
         if (Object.prototype.toString.call(textArray) !== '[object Array]') {
             textArray = [textArray];
         }
-        //If there is an ML response, append it to the msesage array
-        if (newPayload.ml_output) {
-            textArray.push("<h2>" + newPayload.ml_output.nodeADP_class + "</h2>" + "<img src='../img/" + newPayload.ml_output.nodeADP_class + ".png'/>");
-        }
         var messageArray = [];
         textArray.forEach(function (currentText) {
             if (currentText) {
@@ -181,6 +177,38 @@ var ConversationPanel = (function () {
                 messageArray.push(Common.buildDomElement(messageJson));
             }
         });
+        //If there is an ML response, append it to the msesage array
+        if (newPayload.ml_output) {
+            var messageJson = {
+                // <div class='segments'>
+                'tagName': 'div'
+                , 'classNames': ['segments']
+                , 'children': [{
+                    // <div class='from-user/from-watson latest'>
+                    'tagName': 'div'
+                    , 'classNames': ['from-watson', 'latest', 'sub']
+                    , 'children': [{
+                        // <div class='message-inner'>
+                        'tagName': 'div'
+                        , 'classNames': ['message-inner']
+                        , 'children': [{
+                                // <h2>{ Class Name }</h2>
+                                'tagName': 'h2'
+                                , 'text': newPayload.ml_output.nodeADP_class
+                            }
+                            , {
+                                // <img>{ Class Img }</img>
+                                'tagName': 'img'
+                                , 'attributes': [{
+                                    'name': 'src'
+                                    , 'value': "img/" + newPayload.ml_output.nodeADP_class + ".png"
+                            }]
+              }]
+            }]
+          }]
+            };
+            messageArray.push(Common.buildDomElement(messageJson));
+        }
         return messageArray;
     }
     // Scroll to the bottom of the chat window (to the most recent messages)
