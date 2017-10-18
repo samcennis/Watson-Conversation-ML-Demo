@@ -154,61 +154,67 @@ var ConversationPanel = (function () {
         var messageArray = [];
         textArray.forEach(function (currentText) {
             if (currentText) {
-                var messageJson = {
-                    // <div class='segments'>
-                    'tagName': 'div'
-                    , 'classNames': ['segments']
-                    , 'children': [{
-                        // <div class='from-user/from-watson latest'>
+                if (!newPayload.ml_output) {
+                    var messageJson = {
+                        // <div class='segments'>
                         'tagName': 'div'
-                        , 'classNames': [(isUser ? 'from-user' : 'from-watson'), 'latest', ((messageArray.length === 0) ? 'top' : 'sub')]
+                        , 'classNames': ['segments']
                         , 'children': [{
-                            // <div class='message-inner'>
+                            // <div class='from-user/from-watson latest'>
                             'tagName': 'div'
-                            , 'classNames': ['message-inner']
+                            , 'classNames': [(isUser ? 'from-user' : 'from-watson'), 'latest', ((messageArray.length === 0) ? 'top' : 'sub')]
                             , 'children': [{
-                                // <p>{messageText}</p>
-                                'tagName': 'p'
-                                , 'text': currentText
+                                // <div class='message-inner'>
+                                'tagName': 'div'
+                                , 'classNames': ['message-inner']
+                                , 'children': [{
+                                    // <p>{messageText}</p>
+                                    'tagName': 'p'
+                                    , 'text': currentText
               }]
             }]
           }]
-                };
+                    };
+                }
+                else {
+                    var messageJson = {
+                        // <div class='segments'>
+                        'tagName': 'div'
+                        , 'classNames': ['segments']
+                        , 'children': [{
+                            // <div class='from-user/from-watson latest'>
+                            'tagName': 'div'
+                            , 'classNames': [(isUser ? 'from-user' : 'from-watson'), 'latest', ((messageArray.length === 0) ? 'top' : 'sub')]
+                            , 'children': [{
+                                    // <div class='message-inner'>
+                                    'tagName': 'div'
+                                    , 'classNames': ['message-inner']
+                                    , 'children': [{
+                                        // <p>{messageText}</p>
+                                        'tagName': 'p'
+                                        , 'text': currentText
+                                    }]
+                            }
+                                , {
+                                    // <h2>{ Class Name }</h2>
+                                    'tagName': 'h2'
+                                    , 'text': newPayload.ml_output.nodeADP_class
+                            }
+                            
+                                , {
+                                    // <img>{ Class Img }</img>
+                                    'tagName': 'img'
+                                    , 'attributes': [{
+                                        'name': 'src'
+                                        , 'value': "img/" + newPayload.ml_output.nodeADP_class + ".png"
+                                }]
+                            }]
+                        }]
+                    };
+                }
                 messageArray.push(Common.buildDomElement(messageJson));
             }
         });
-        //If there is an ML response, append it to the msesage array
-        if (newPayload.ml_output) {
-            var messageJson = {
-                // <div class='segments'>
-                'tagName': 'div'
-                , 'classNames': ['segments']
-                , 'children': [{
-                    // <div class='from-user/from-watson latest'>
-                    'tagName': 'div'
-                    , 'classNames': ['from-watson', 'latest', 'sub']
-                    , 'children': [{
-                        // <div class='message-inner'>
-                        'tagName': 'div'
-                        , 'classNames': ['message-inner']
-                        , 'children': [{
-                                // <h2>{ Class Name }</h2>
-                                'tagName': 'h2'
-                                , 'text': newPayload.ml_output.nodeADP_class
-                            }
-                            , {
-                                // <img>{ Class Img }</img>
-                                'tagName': 'img'
-                                , 'attributes': [{
-                                    'name': 'src'
-                                    , 'value': "img/" + newPayload.ml_output.nodeADP_class + ".png"
-                            }]
-              }]
-            }]
-          }]
-            };
-            messageArray.push(Common.buildDomElement(messageJson));
-        }
         return messageArray;
     }
     // Scroll to the bottom of the chat window (to the most recent messages)

@@ -3,7 +3,7 @@ var Api = (function () {
     var requestPayload;
     var responsePayload;
     var scoreResponsePayload;
-    var messageEndpoint = 'https://watson-conversation-ml-demo.mybluemix.net/api/message';
+    var messageEndpoint = '/api/message';
     // Publicly accessible methods defined
     return {
         sendRequest: sendRequest, // The request/response getters/setters are defined here to prevent internal methods
