@@ -21,7 +21,8 @@ div {
     width: 3.125rem;
     height: 3.125rem;
     border-radius: 1.5625rem;
-    background: #AB72F8;
+    /*background: #AB72F8;*/
+    background: #72b1f8;
     top: 0.3125rem;
     right: 0.3125rem;
     line-height: 3.125rem;
