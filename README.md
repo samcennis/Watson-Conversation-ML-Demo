@@ -1,17 +1,19 @@
-Watson Conversation + Watson Machine Learning Demo
+# Watson Conversation + Watson Machine Learning Demo
 
-A predictive chatbot for a fictional gym called Fitness Club USA. The chatbot uses several Bluemix services, including:
+A predictive chatbot to give personalized fitness class recommendations for members of a fictional gym chain, Fitness Club USA. The chatbot uses several Bluemix services, including:
 
 1. Watson Machine Learning
 2. Watson Conversation
 3. Node-RED
 4. Data Science Experience
 5. Cloudant
+6. Watson Tone Analyzer (optional)
 
-Note: This is a simple starting point “proof-of-concept” and not production-ready. Follow these instructions to get things up and running yourself!
+Note: This application is a simple starting point “proof-of-concept” and not viable for production. 
 
+Follow these instructions to get things up and running:
 
-Setting up Node-RED
+## Set up Node-RED
 
 1. Sign up for a Bluemix account here: https://console.bluemix.net/registration/
 2. Once you’re logged in, provision a Node-RED starter application here: https://console.bluemix.net/catalog/starters/node-red-starter
@@ -32,7 +34,7 @@ Setting up Node-RED
         2. Copy the text from the setting-up-yourself/Final-Node-RED-Flow.json file in this Github repo and paste it into the “Paste nodes here” section. You should see a new tab called “Final Flow”. click on this.
         3. Awesome! The final flow is now there. It won’t work yet though because you haven’t set up the Watson Conversation, Watson Machine Learning, and Watson Tone Analyzer services and gotten your new credentials. You will also need to populate the Cloudant database (automatically provisioned with the Node-RED starter) with a couple of customer records. Leave Node-RED open in a tab.
 
-Setting up Data Science Experience and Watson Machine Learning
+## Set up Data Science Experience and Watson Machine Learning
 
 1. From the Bluemix catalog, create your Data Science Experience service here: https://console.bluemix.net/catalog/services/data-science-experience
     1. Select “Get Started” to enter Data Science Experience
@@ -43,7 +45,7 @@ Setting up Data Science Experience and Watson Machine Learning
     2. Click on the “Free” price plan, then “Buy IBM Watson Machine Learning”. This will provision it and you will also be able to see it in your same Bluemix organization/space. Select “Confirm”
     3. Excellent. You now have a Watson Machine Learning instance associated with your Data Science Experience project.
 
-Create and Deploy the Predictive “Fitness Class Recommendation” Model
+## Create and Deploy the Predictive “Fitness Class Recommendation” Model
 
 1. Scroll up to the top of the page and select “Analytics assets”
 2. Next to the “Models” list, you should see “New model” to enter the model builder interface
@@ -77,7 +79,7 @@ Create and Deploy the Predictive “Fitness Class Recommendation” Model
         1. Find the node that says “WML - Get Auth Key”
         2. Select “use basic authentication”. Then copy the Username and Password from the WML credentials into the fields.
 
-Create Watson Conversation Service and Import Conversation
+## Create Watson Conversation Service and Import Conversation
 
 1. From the Bluemix Catalog, create your Watson Conversation service here: https://console.bluemix.net/catalog/services/conversation
     1. Select “Create”
@@ -91,7 +93,8 @@ Create Watson Conversation Service and Import Conversation
         1. You should see a Workspace ID, Username, and Password on the page
     3. Go back to your Node-RED Final Flow and copy all three of these into the appropriate fields in the “Watson Conversation API” node.
 
-Add a Customer Record to Cloudant NoSQL database
+## Add a Customer Record to Cloudant NoSQL database
+
 1. From your Bluemix dashboard, you should be able to find “<your-app-name>-cloudantNoSQLDB” listed under services. This is the Node-RED starter’s NoSQL database that was automatically provisioned. We will all use this as our customer records database to allow our app to pull up customer information. Click on the database, then select “Launch” to open the database dashboard.
 2. Create “customer_info” database.
     1. From the Cloudant dashboard, select the second button down on the left to get to your Databases. There should just be one right now called nodered. We want to make a new one called “customer_info”. 
@@ -100,12 +103,14 @@ Add a Customer Record to Cloudant NoSQL database
     1. Select “Create Document”, and then copy and paste the JSON from the setting-up-yourself/customer-example.json file. Make sure to paste over anything that is already in the window.
 4. If you want to add more customers, feel free to do so. Note that the _id field is populated with a phone number and must be unique.
 
-Add the chatbot front-end to your Node-RED application.
+## Add the chatbot front-end to your Node-RED application.
+
 1. To add the “front-end” chat interface, simply replace the /public folder with the one in this repository.
 2. Deploy again using “cf push” and wait for the app to deploy
 3. When you visit <your-app-name>.mybluemix.net, you should now have a pretty UI!
 
-Optional — add in Watson Tone Analyzer
+## Optional — add in Watson Tone Analyzer
+
 1. The Node-RED final flow has a disconnected portion with a Watson Tone Analyzer API. It is left as an exercise to add this into your flow. You will need to add the Watson Tone Analyzer service from the Bluemix Catalog and get credentials to plug in, similar to what we did with the other services. 
 2. Once you’ve added credentials, to add it into your flow:
     1. Delete the wire between “Prep Input Message” and “Watson Conversation API” 
