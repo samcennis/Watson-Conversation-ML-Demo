@@ -17,18 +17,18 @@ Follow these instructions to get things up and running:
 
 1. Sign up for a Bluemix account here: https://console.bluemix.net/registration/
 2. Once you’re logged in, provision a Node-RED starter application here: https://console.bluemix.net/catalog/starters/node-red-starter
-    1. Enter a unique “App name” (refered throughout the instructions as <your-app-name>) and select “Create” to provision the Node-RED starter application.
+    1. Enter a unique “App name” (refered throughout the instructions as *your-app-name*) and select “Create” to provision the Node-RED starter application.
     2. Set up your local development environment
         1. From the “Getting Started” page of the Node-RED starter application, (you should be taken her automatically) follow the instructions under “Customizing your Node-RED instance” in order to install the Cloud Foundry command line interface, download and extract the starter code locally, then deploy back to Bluemix with “cf push”.
-    3. After waiting for the app to deploy and start, it will be running at <your-app-name>.mybluemix.net and you can visit it
-3. After your app is up and running (It will take a few minutes. You should see a confirmation of “running” state on the command line), visit <your-app-name>.mybluemix.net/ to get started with the Node red editor. 
+    3. After waiting for the app to deploy and start, it will be running at *your-app-name*.mybluemix.net and you can visit it
+3. After your app is up and running (It will take a few minutes. You should see a confirmation of “running” state on the command line), visit *your-app-name*.mybluemix.net/ to get started with the Node red editor. 
 4. Follow the steps in the menu
     1. I recommend securing your editor with a username and passcode, (remember this…it’s important) select Next
     2. You do not need any additional nodes right now, so select Next
     3. Select “Finish”
     4. On the new screen that appears, select “Go to your Node-RED flow editor”
 5. Add in my Node-RED flow
-    1. Visit <your-app-name>.mybluemix.net/red and log in to your editor. You should then be at the flow editing page. You can take a look at all the connectors to the left… pretty cool!
+    1. Visit *your-app-name*.mybluemix.net/red and log in to your editor. You should then be at the flow editing page. You can take a look at all the connectors to the left… pretty cool!
     2. Select the sandwich button in the top right to get a drop down menu
         1. Select Import > Clipboard
         2. Copy the text from the setting-up-yourself/Final-Node-RED-Flow.json file in this Github repo and paste it into the “Paste nodes here” section. You should see a new tab called “Final Flow”. click on this.
@@ -95,11 +95,11 @@ Follow these instructions to get things up and running:
     
 ## Deploy the Node-RED Flow
 
-1. Select "Deploy" in the upper right portion of the screen in order to deploy your Node-RED flow. This will now make this flow callable as a RESTful endpoint at <your-app-name>.mybluemix.net/api/message (the endpoint defined in the HTTP Request node) .
+1. Select "Deploy" in the upper right portion of the screen in order to deploy your Node-RED flow. This will now make this flow callable as a RESTful endpoint at *your-app-name*.mybluemix.net/api/message (the endpoint defined in the HTTP Request node) .
 
 ## Add a Customer Record to Cloudant NoSQL database
 
-1. From your Bluemix dashboard, you should be able to find “<your-app-name>-cloudantNoSQLDB” listed under services. This is the Node-RED starter’s NoSQL database that was automatically provisioned. We will all use this as our customer records database to allow our app to pull up customer information. Click on the database, then select “Launch” to open the database dashboard.
+1. From your Bluemix dashboard, you should be able to find “*your-app-name*-cloudantNoSQLDB” listed under services. This is the Node-RED starter’s NoSQL database that was automatically provisioned. We will all use this as our customer records database to allow our app to pull up customer information. Click on the database, then select “Launch” to open the database dashboard.
 2. Create “customer_info” database.
     1. From the Cloudant dashboard, select the second button down on the left to get to your Databases. There should just be one right now called nodered. We want to make a new one called “customer_info”. 
     2. Select “Create Database” in the top right of the screen, enter the name of “customer_info”, then “Create”
@@ -111,7 +111,7 @@ Follow these instructions to get things up and running:
 
 1. To add the “front-end” chat interface, simply replace the /public folder with the one in this repository.
 2. Deploy again using “cf push” and wait for the app to deploy
-3. When you visit <your-app-name>.mybluemix.net, you should now have a pretty UI!
+3. When you visit *your-app-name*.mybluemix.net, you should now have a pretty UI!
 
 ## Optional — add in Watson Tone Analyzer
 
