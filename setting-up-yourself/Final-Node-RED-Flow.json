@@ -1,0 +1,394 @@
+[
+    {
+        "id": "5efe12d1.715d8c"
+        , "type": "tab"
+        , "label": "Final Flow"
+        , "disabled": false
+        , "info": ""
+    }
+    , {
+        "id": "9d0f0c0d.eb5ac"
+        , "type": "http in"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Request"
+        , "url": "/api/message"
+        , "method": "post"
+        , "upload": false
+        , "swaggerDoc": ""
+        , "x": 108.33333969116211
+        , "y": 327.3333444595337
+        , "wires": [
+            [
+                "1bcabb2f.2d7495"
+            ]
+        ]
+    }
+    , {
+        "id": "18bb930c.52b61d"
+        , "type": "watson-conversation-v1"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Watson Conversation API"
+        , "workspaceid": "e92d5578-d66c-4479-ab89-6f1efea62711"
+        , "multiuser": false
+        , "context": false
+        , "empty-payload": false
+        , "default-endpoint": true
+        , "service-endpoint": "https://gateway.watsonplatform.net/conversation/api"
+        , "x": 663.0794067382812
+        , "y": 327.14270401000977
+        , "wires": [
+            [
+                "6482aaed.03b5b4"
+                , "aa478621.919c58"
+            ]
+        ]
+    }
+    , {
+        "id": "aa478621.919c58"
+        , "type": "switch"
+        , "z": "5efe12d1.715d8c"
+        , "name": "What action?"
+        , "property": "payload.output.nodes_visited[0]"
+        , "propertyType": "msg"
+        , "rules": [
+            {
+                "t": "eq"
+                , "v": "node_7_1507329128257"
+                , "vt": "str"
+            }
+            , {
+                "t": "eq"
+                , "v": "node_1_1507320594180"
+                , "vt": "str"
+            }
+            , {
+                "t": "else"
+            }
+        ]
+        , "checkall": "false"
+        , "outputs": 3
+        , "x": 901.6666488647461
+        , "y": 328.33334732055664
+        , "wires": [
+            [
+                "2e4ddfb3.9907d"
+                , "b354b78f.594718"
+            ]
+            , [
+                "e27d9611.b417e8"
+            ]
+            , [
+                "b3fe3e1f.fe93c"
+            ]
+        ]
+    }
+    , {
+        "id": "1bcabb2f.2d7495"
+        , "type": "function"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Prep Input Message"
+        , "func": "//x = msg.payload.workspace_id\n\nx = msg.payload.input;\n\nvar y;\n\n//Single space starts conversation over\nif (x == \"/new\"){\n    x = \" \";\n    y = null;\n    global.set(\"convo_context\", null);\n    global.set(\"customer_record\", null);\n    global.set(\"sign_up_reason\", null);\n    \n} else {\n    y = global.get(\"convo_context\") || null;\n}\n\nmsg.payload = x;\n\nmsg.params = {};\n\nmsg.params.context = y;\n\nreturn msg;"
+        , "outputs": 1
+        , "noerr": 0
+        , "x": 246.5873260498047
+        , "y": 462.0157051086426
+        , "wires": [
+            [
+                "18bb930c.52b61d"
+            ]
+        ]
+    }
+    , {
+        "id": "8b388e54.3ad81"
+        , "type": "function"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Parse SparkML Output"
+        , "func": "x = {};\n\nfor (i = 0; i < msg.payload.fields.length; i++){\n    x[msg.payload.fields[i]] = msg.payload.values[0][i]; \n}\n\nmsg.payload = x;\n\nreturn msg;"
+        , "outputs": 1
+        , "noerr": 0
+        , "x": 1936.6667098999023
+        , "y": 223.33331823349
+        , "wires": [
+            [
+                "7a9c62b5.1b2ddc"
+            ]
+        ]
+    }
+    , {
+        "id": "12756951.27e827"
+        , "type": "http request"
+        , "z": "5efe12d1.715d8c"
+        , "name": "WML - SparkML"
+        , "method": "POST"
+        , "ret": "obj"
+        , "url": "https://ibm-watson-ml.mybluemix.net/v3/wml_instances/0ca3b66e-3ad6-45b1-9824-a71907d1afa6/published_models/a2ed4912-3465-4760-b31e-f37e6dd104f2/deployments/9860115c-a8f8-4c6e-943e-9c344515a745/online"
+        , "tls": ""
+        , "x": 2026.1906051635742
+        , "y": 166.33326625823975
+        , "wires": [
+            [
+                "8b388e54.3ad81"
+            ]
+        ]
+    }
+    , {
+        "id": "65cfeec0.1b86d"
+        , "type": "http request"
+        , "z": "5efe12d1.715d8c"
+        , "name": "WML - Get Auth Key - SparkML"
+        , "method": "GET"
+        , "ret": "obj"
+        , "url": "https://ibm-watson-ml.mybluemix.net/v3/identity/token"
+        , "tls": ""
+        , "x": 1504.190544128418
+        , "y": 166.52379322052002
+        , "wires": [
+            [
+                "3e4ca062.27fbf"
+            ]
+        ]
+    }
+    , {
+        "id": "2e4ddfb3.9907d"
+        , "type": "function"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Set Headers for Authorization - SparkML"
+        , "func": "msg.headers = {};\nmsg.headers['Content-Type'] = 'application/json';\n\nreturn msg;"
+        , "outputs": 1
+        , "noerr": 0
+        , "x": 1198.6666870117188
+        , "y": 166.52375411987305
+        , "wires": [
+            [
+                "65cfeec0.1b86d"
+            ]
+        ]
+    }
+    , {
+        "id": "8e4fb270.2e051"
+        , "type": "http response"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Response"
+        , "statusCode": "200"
+        , "headers": {}
+        , "x": 2266.6667098999023
+        , "y": 303.33331823349
+        , "wires": []
+    }
+    , {
+        "id": "b354b78f.594718"
+        , "type": "function"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Keep Watson Conversation Information"
+        , "func": "msg.topic = \"conversation\"\n\nreturn msg;"
+        , "outputs": 1
+        , "noerr": 0
+        , "x": 1470.4763793945312
+        , "y": 227.285804271698
+        , "wires": [
+            [
+                "7a9c62b5.1b2ddc"
+            ]
+        ]
+    }
+    , {
+        "id": "7a9c62b5.1b2ddc"
+        , "type": "function"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Combine ML Output with Conversation Response"
+        , "func": "context.ml_output = context.ml_output || false;\ncontext.convo_response = context.convo_response || false;\n\n//Conversation Input\nif (msg.topic == \"conversation\"){\n    context.convo_response = msg.payload;\n} \n//ML Input\nelse{\n    context.ml_output = msg.payload;\n}\n\n//Both inputs have arrived\nif (context.ml_output && context.convo_response){\n\n    msg.payload = { \"convo\": context.convo_response,\n                    \"ml_output\": context.ml_output }\n        \n    //Clear for the next time through.    \n    context.ml_output = null;\n    context.convo_response = null;\n    \n} \n//Only one input has arrived. Do not pass along a message yet\nelse {\n    return null;\n}\n\nreturn msg;"
+        , "outputs": 1
+        , "noerr": 0
+        , "x": 1976.6667098999023
+        , "y": 303.33331823349
+        , "wires": [
+            [
+                "8e4fb270.2e051"
+            ]
+        ]
+    }
+    , {
+        "id": "b3fe3e1f.fe93c"
+        , "type": "function"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Prepare Response for Output With No ML"
+        , "func": "//If there a fitness goal, save it as a global variable\nif (msg.payload.entities && msg.payload.entities[0] && msg.payload.entities[0].entity == \"goal\"){\n    sign_up_reason = msg.payload.entities[0].value;\n\n    global.set(\"sign_up_reason\", sign_up_reason);\n\n    //Update the conversation context with the sign up reason\n    convo_context = global.get(\"convo_context\");\n    convo_context.sign_up_reason = sign_up_reason;\n    global.set(\"convo_context\", convo_context);\n}\n\n\nmsg.payload = { \"convo\": msg.payload,\n                \"ml_output\": false}\n                \nreturn msg;"
+        , "outputs": 1
+        , "noerr": 0
+        , "x": 1266.6667098999023
+        , "y": 543.33331823349
+        , "wires": [
+            [
+                "a5039321.f61e7"
+            ]
+        ]
+    }
+    , {
+        "id": "a5039321.f61e7"
+        , "type": "http response"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Response"
+        , "statusCode": "200"
+        , "headers": {}
+        , "x": 1546.6667098999023
+        , "y": 543.33331823349
+        , "wires": []
+    }
+    , {
+        "id": "6482aaed.03b5b4"
+        , "type": "function"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Save Conversation Context"
+        , "func": "global.set(\"convo_context\", msg.payload.context);"
+        , "outputs": 1
+        , "noerr": 0
+        , "x": 782.1429443359375
+        , "y": 469.66665267944336
+        , "wires": [
+            []
+        ]
+    }
+    , {
+        "id": "4db9bd1e.4d5fc4"
+        , "type": "cloudant in"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Get Customer Info from DB"
+        , "cloudant": ""
+        , "database": "customer_info"
+        , "service": "new-test-node-red-cloudantNoSQLDB"
+        , "search": "_id_"
+        , "design": ""
+        , "index": ""
+        , "x": 1386.6667098999023
+        , "y": 343.33331823349
+        , "wires": [
+            [
+                "b1d09643.30fe38"
+            ]
+        ]
+    }
+    , {
+        "id": "e27d9611.b417e8"
+        , "type": "function"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Parse Customer ID"
+        , "func": "function formatPhoneNumber(s) {\n  var s2 = (\"\"+s).replace(/\\D/g, '');\n  var m = s2.match(/^(\\d{3})(\\d{3})(\\d{4})$/);\n  return (!m) ? null : \"\" + m[1] + \"\" + m[2] + \"\" + m[3];\n}\n\nif (msg.payload.entities[0].entity == \"phonenumber\"){\n    msg.payload = formatPhoneNumber(msg.payload.input.text);\n}\n\nreturn msg;"
+        , "outputs": 1
+        , "noerr": 0
+        , "x": 1136.6667098999023
+        , "y": 343.33331823349
+        , "wires": [
+            [
+                "4db9bd1e.4d5fc4"
+            ]
+        ]
+    }
+    , {
+        "id": "b1d09643.30fe38"
+        , "type": "function"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Save Customer Record"
+        , "func": "//Save customer record to be used by predictive model\n//Remove cloudant-specific fields\ndelete msg.payload._id;\ndelete msg.payload._rev;\n\ncustomer_name = msg.payload.NAME;\n\nglobal.set(\"customer_record\", msg.payload);\n\n//Update the conversation context with the customer info\nconvo_context = global.get(\"convo_context\");\n\nconvo_context.customer_record = msg.payload;\n\nglobal.set(\"convo_context\", convo_context);\n\nmsg.payload = {};\n\nmsg.payload.input = customer_name;\n\nreturn msg;"
+        , "outputs": 1
+        , "noerr": 0
+        , "x": 730.0000534057617
+        , "y": 636.6666321754456
+        , "wires": [
+            [
+                "1bcabb2f.2d7495"
+            ]
+        ]
+    }
+    , {
+        "id": "3e4ca062.27fbf"
+        , "type": "function"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Set Body and Headers for Score"
+        , "func": "customer_record = global.get(\"customer_record\");\nsign_up_reason = global.get(\"sign_up_reason\");\n    \nmsg.headers = {};\nmsg.headers['Content-Type'] = 'application/json';\nmsg.headers['Authorization'] = 'Bearer ' + msg.payload.token;\n\n//Customer Record\nfields = Object.keys(customer_record);\n\n//Customer record global may sometime have an \"input\" field. We don't want that.\n//if (fields.includes(\"input\")){\n//    fields = fields.filter(e => e !== \"input\");\n//}\n\nvalues = [];\nfor (var k = 0; k < fields.length; k++){\n    values.push(customer_record[fields[k]]);\n}\n\n//Sign Up Reason\nfields.push(\"SIGN_UP_REASON\");\nvalues.push(sign_up_reason);\n\nmsg.payload = {\n    \"fields\": fields,\n    \"values\": [values]\n};\n\nreturn msg;"
+        , "outputs": 1
+        , "noerr": 0
+        , "x": 1781.6667556762695
+        , "y": 167.76180744171143
+        , "wires": [
+            [
+                "12756951.27e827"
+            ]
+        ]
+    }
+    , {
+        "id": "6deb749b.7cfbec"
+        , "type": "watson-tone-analyzer-v3"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Watson Tone Analyzer API"
+        , "tones": "emotion"
+        , "sentences": "false"
+        , "contentType": "false"
+        , "tone-method": "generalTone"
+        , "interface-version": "2016-05-19"
+        , "inputlang": "en"
+        , "default-endpoint": true
+        , "service-endpoint": "https://gateway.watsonplatform.net/tone-analyzer/api"
+        , "x": 240
+        , "y": 180
+        , "wires": [
+            [
+                "1fe9fa07.6ea096"
+            ]
+        ]
+    }
+    , {
+        "id": "1fe9fa07.6ea096"
+        , "type": "switch"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Customer Angry?"
+        , "property": "response.document_tone.tone_categories[0].tones[0].score"
+        , "propertyType": "msg"
+        , "rules": [
+            {
+                "t": "gt"
+                , "v": ".75"
+                , "vt": "str"
+            }
+            , {
+                "t": "else"
+            }
+        ]
+        , "checkall": "true"
+        , "outputs": 2
+        , "x": 413.6667022705078
+        , "y": 287
+        , "wires": [
+            [
+                "60369ad2.f71784"
+            ]
+            , []
+        ]
+    }
+    , {
+        "id": "9b4d3e31.87098"
+        , "type": "http response"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Response"
+        , "statusCode": ""
+        , "headers": {}
+        , "x": 811.6665744781494
+        , "y": 189.99999713897705
+        , "wires": []
+    }
+    , {
+        "id": "60369ad2.f71784"
+        , "type": "function"
+        , "z": "5efe12d1.715d8c"
+        , "name": "Deal With Angry Customer"
+        , "func": "message = \"I'm sorry you are feeling frustrated. Let me transfer you to a live agent.\"\n\nmsg.payload = \n{ \n    \"convo\": {\n        \"output\":{\n            \"text\": message\n        }\n    },\n    \"ml_output\": false\n};\n                \nreturn msg;"
+        , "outputs": 1
+        , "noerr": 0
+        , "x": 595.0000381469727
+        , "y": 190.00000286102295
+        , "wires": [
+            [
+                "9b4d3e31.87098"
+            ]
+        ]
+    }
+]
