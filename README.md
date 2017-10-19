@@ -92,6 +92,10 @@ Follow these instructions to get things up and running:
     2. Select “Credentials at the top”, wait for Workspace Details and Service Credentials to load
         1. You should see a Workspace ID, Username, and Password on the page
     3. Go back to your Node-RED Final Flow and copy all three of these into the appropriate fields in the “Watson Conversation API” node.
+    
+## Deploy the Node-RED Flow
+
+1. Select "Deploy" in the upper right portion of the screen in order to deploy your Node-RED flow. This will now make this flow callable as a RESTful endpoint at <your-app-name>.mybluemix.net/api/message (the endpoint defined in the HTTP Request node) .
 
 ## Add a Customer Record to Cloudant NoSQL database
 
